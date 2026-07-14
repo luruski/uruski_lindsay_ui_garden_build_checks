@@ -1,50 +1,57 @@
-# Uruski Lindsay UI Garden
+# Coding Assignment 13: UI Component Library
 
-A component library built with React, TypeScript, and Storybook.
+## Overview
 
-## Step 1 - Install Dependencies
+This project adds code quality checks to the UI component library from Assignment 12. It uses Husky to run pre-commit checks, GitHub Actions to run the same checks on every push, and Docker to host a production build of the application on localhost port 8018.
 
-npm install --legacy-peer-deps
+## How to Run the Application in Docker
 
-## Step 2 - Run Storybook
+1. Make sure Docker Desktop is installed and running on your computer.
 
-npm run storybook
+2. Clone this repository and move into the project folder:
 
-Open http://localhost:6006 to view the component library in Storybook.
+   git clone git@github.com:luruski/uruski_lindsay_ui_garden_build_checks.git
 
-## Step 3 - Build the Project
+   cd uruski_lindsay_ui_garden_build_checks
 
-npm run build
+3. Build the Docker image:
 
-This creates a production build in the /build folder.
+   docker build -t uruski_lindsay_ui_garden_build_checks .
 
-## Step 4 - Run with Docker
+4. Run the container with the required name and port:
 
-Make sure Docker is running on your machine, then:
+   docker run -d -p 8018:8018 --name uruski_lindsay_coding_assignment13 uruski_lindsay_ui_garden_build_checks
 
-Build the container:
-docker build -t uruski_lindsay_coding_assignment12 .
+5. Open your browser and go to http://localhost:8018 to see the component library running.
 
-Run the container:
-docker run -p 8083:8083 uruski_lindsay_coding_assignment12
+## Pre-Commit Checks with Husky
 
-## Step 5 - Access the Site
+Husky runs three checks before every commit. If any check fails, the commit is blocked and the code cannot be submitted.
 
-Open your browser and go to:
-http://127.0.0.1:8083
+The checks are:
 
-## Run Tests
+1. Prettier, which makes sure all code follows consistent formatting rules
+2. ESLint, which catches code quality problems and potential bugs
+3. Tests, which run the full React Testing Library test suite
 
-npm test
+To run the checks manually:
 
-## Components Included
+npm run format:check
 
-- Button
-- Label
-- Text
-- Table (Table header, Table row, Table cell, Table footer)
-- Dropdown
-- Radio Button
-- Img
-- Hero Image
-- Card
+npm run lint
+
+npm run test:ci
+
+## GitHub Actions Workflow
+
+The workflow file is located at .github/workflows/build-checks.yml. It runs on every push and pull request to the main branch. It installs dependencies, then runs the Prettier check, the ESLint check, all tests, and finally the production build. If any step fails, the workflow fails and GitHub sends a notification email. This means the checks are enforced even if the local pre-commit hooks are bypassed.
+
+## Running Locally Without Docker
+
+1. Install dependencies:
+
+   npm install --legacy-peer-deps
+
+2. Start the development server:
+
+   npm start
